@@ -1,6 +1,6 @@
-import { TodoControllerImpl } from "../../../../src/domain/controllers/todoController";
-import { TodoDataSource } from "../../../../src/data/interfaces/dataSources/todoDataSource";
-import { Todo } from "../../../../src/domain/entities/todo";
+import { TodoControllerImpl } from "../../../src/domain/controllers/todoController";
+import { TodoDataSource } from "../../../src/data/interfaces/dataSources/todoDataSource";
+import { Todo } from "../../../src/domain/entities/todo";
 
 describe("Todo controller", () => {
   class MockTodoDataSource implements TodoDataSource {
