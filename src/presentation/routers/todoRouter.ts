@@ -30,5 +30,15 @@ export function TodoRouter(
     }
   });
 
+  router.delete("/", async (req: Request, res: Response) => {
+    try {
+      const { id } = req.body;
+      await deleteTodoUseCase.execute(id);
+      res.status(204).end();
+    } catch (err) {
+      res.status(500).send({ message: "Error deleting todo" });
+    }
+  });
+
   return router;
 }

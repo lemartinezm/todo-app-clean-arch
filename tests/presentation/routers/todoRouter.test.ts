@@ -142,4 +142,34 @@ describe("Todo Router", () => {
       expect(mockCreateTodoUseCase.execute).toHaveBeenCalledWith(InputData);
     });
   });
+
+  describe("DELETE /todo", () => {
+    it("should return status 204", async () => {
+      const id = "1a1a";
+
+      jest
+        .spyOn(mockDeleteTodoUseCase, "execute")
+        .mockImplementation(() => Promise.resolve(true));
+
+      const response = await request(server).delete("/todo").send({ id });
+
+      expect(response.status).toBe(204);
+      expect(mockDeleteTodoUseCase.execute).toHaveBeenCalledWith(id);
+    });
+
+    it("should return status 500 with error message", async () => {
+      const message = "Error deleting todo";
+      const id = "1a1a";
+
+      jest
+        .spyOn(mockDeleteTodoUseCase, "execute")
+        .mockImplementation(() => Promise.reject(Error()));
+
+      const response = await request(server).delete("/todo").send({ id });
+
+      expect(response.status).toBe(500);
+      expect(response.body).toStrictEqual({ message });
+      expect(mockDeleteTodoUseCase.execute).toHaveBeenCalledWith(id);
+    });
+  });
 });
