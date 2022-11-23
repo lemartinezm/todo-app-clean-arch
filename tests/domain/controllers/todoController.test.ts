@@ -38,8 +38,8 @@ describe("Todo controller", () => {
         id: "1",
         name: "My todo",
         description: "My description",
-        createdAt: new Date(),
-        deadline: new Date(),
+        createdAt: new Date().toJSON(),
+        deadline: new Date().toJSON(),
         priority: "low",
         completed: false,
         creator: "1",
@@ -59,12 +59,12 @@ describe("Todo controller", () => {
 
   test("Get by id should return data", async () => {
     const id = "1a1a";
-    const ExpectedResult = {
+    const ExpectedResult: Todo = {
       id: "1",
       name: "My todo",
       description: "My description",
-      createdAt: new Date(),
-      deadline: new Date(),
+      createdAt: new Date().toJSON(),
+      deadline: new Date().toJSON(),
       priority: "low",
       completed: false,
       creator: "1",
@@ -86,8 +86,8 @@ describe("Todo controller", () => {
       id: "1",
       name: "My todo",
       description: "My description",
-      createdAt: new Date(),
-      deadline: new Date(),
+      createdAt: new Date().toJSON(),
+      deadline: new Date().toJSON(),
       priority: "low",
       completed: false,
       creator: "1",
