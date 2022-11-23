@@ -172,4 +172,47 @@ describe("Todo Router", () => {
       expect(mockDeleteTodoUseCase.execute).toHaveBeenCalledWith(id);
     });
   });
+
+  describe("PUT /todo", () => {
+    const id = "1a1a";
+    const dataToUpdate: Partial<Todo> = {
+      name: "My todo modified",
+      description: "My description modified",
+    };
+
+    it("should return status 200", async () => {
+      const message = "Todo updated successfully";
+
+      jest
+        .spyOn(mockUpdateTodoUseCase, "execute")
+        .mockImplementation(() => Promise.resolve(true));
+
+      const response = await request(server)
+        .put("/todo")
+        .send({ id, dataToUpdate });
+
+      expect(response.status).toBe(200);
+      expect(response.body).toStrictEqual({ message });
+      expect(mockUpdateTodoUseCase.execute).toHaveBeenCalledWith(
+        id,
+        dataToUpdate
+      );
+    });
+
+    it("should return status 500 with error message", async () => {
+      const message = "Error updating todo";
+
+      jest
+        .spyOn(mockUpdateTodoUseCase, "execute")
+        .mockImplementation(() => Promise.reject(Error()));
+
+      const response = await request(server)
+        .put("/todo")
+        .send({ id, dataToUpdate });
+
+      expect(response.status).toBe(500);
+      expect(response.body).toStrictEqual({ message });
+      expect(mockUpdateTodoUseCase.execute).toHaveBeenCalledWith(id, dataToUpdate);
+    });
+  });
 });

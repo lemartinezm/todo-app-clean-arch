@@ -40,5 +40,15 @@ export function TodoRouter(
     }
   });
 
+  router.put("/", async (req: Request, res: Response) => {
+    try {
+      const { id, dataToUpdate } = req.body;
+      await updateTodoUseCase.execute(id, dataToUpdate);
+      res.status(200).send({ message: "Todo updated successfully" });
+    } catch (err) {
+      res.status(500).send({ message: "Error updating todo" });
+    }
+  });
+
   return router;
 }
