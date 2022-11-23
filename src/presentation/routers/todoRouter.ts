@@ -21,5 +21,14 @@ export function TodoRouter(
     }
   });
 
+  router.post("/", async (req: Request, res: Response) => {
+    try {
+      await createTodoUseCase.execute(req.body);
+      res.status(201).send({ message: "Todo created successfully" });
+    } catch (err) {
+      res.status(500).send({ message: "Error creating todo" });
+    }
+  });
+
   return router;
 }

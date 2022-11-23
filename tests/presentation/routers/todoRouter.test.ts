@@ -69,8 +69,8 @@ describe("Todo Router", () => {
           id: "1",
           name: "My todo",
           description: "My description",
-          createdAt: new Date(),
-          deadline: new Date(),
+          createdAt: new Date().toJSON(),
+          deadline: new Date().toJSON(),
           priority: "low",
           completed: false,
           creator: "1",
@@ -85,13 +85,7 @@ describe("Todo Router", () => {
 
       expect(mockGetAllTodosUseCase.execute).toHaveBeenCalled();
       expect(response.status).toBe(200);
-      expect(response.body).toStrictEqual([
-        {
-          ...ExpectedResult[0],
-          createdAt: ExpectedResult[0].createdAt.toJSON(),
-          deadline: ExpectedResult[0].deadline.toJSON(),
-        },
-      ]);
+      expect(response.body).toStrictEqual(ExpectedResult);
     });
 
     it("should return error with status 500", async () => {
@@ -105,6 +99,47 @@ describe("Todo Router", () => {
 
       expect(response.status).toBe(500);
       expect(response.body).toStrictEqual({ message });
+    });
+  });
+
+  describe("POST /todo", () => {
+    const InputData: Todo = {
+      id: "1",
+      name: "My todo",
+      description: "My description",
+      createdAt: new Date().toJSON(),
+      deadline: new Date().toJSON(),
+      priority: "low",
+      completed: false,
+      creator: "1",
+    };
+
+    it("should return true", async () => {
+      const message = "Todo created successfully";
+
+      jest
+        .spyOn(mockCreateTodoUseCase, "execute")
+        .mockImplementation(() => Promise.resolve(true));
+
+      const response = await request(server).post("/todo").send(InputData);
+
+      expect(response.status).toBe(201);
+      expect(response.body).toStrictEqual({ message });
+      expect(mockCreateTodoUseCase.execute).toHaveBeenCalledWith(InputData);
+    });
+
+    it("should return error with status 500", async () => {
+      const message = "Error creating todo";
+
+      jest
+        .spyOn(mockCreateTodoUseCase, "execute")
+        .mockImplementation(() => Promise.reject(Error()));
+
+      const response = await request(server).post("/todo").send(InputData);
+
+      expect(response.status).toBe(500);
+      expect(response.body).toStrictEqual({ message });
+      expect(mockCreateTodoUseCase.execute).toHaveBeenCalledWith(InputData);
     });
   });
 });
