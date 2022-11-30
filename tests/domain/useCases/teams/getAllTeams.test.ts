@@ -35,6 +35,7 @@ describe("Get all teams use case", () => {
   test("Get all teams should return data", async () => {
     const ExpectedResult: Team[] = [
       {
+        id: "1a1a1a",
         name: "My team",
         leader: "a1a1a1",
         participants: ["a1a1a"],
