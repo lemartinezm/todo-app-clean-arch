@@ -33,8 +33,13 @@ import { CreateTeam } from "./domain/useCases/teams/createTeam";
 import { DeleteTeam } from "./domain/useCases/teams/deleteTeam";
 import { UpdateTeam } from "./domain/useCases/teams/updateTeam";
 
+import dotenv from "dotenv";
+dotenv.config();
+
 (async () => {
-  await mongoose.connect("mongodb://localhost:27017/todoapp");
+  const MONGO_URI = process.env.MONGO_URI;
+  if (!MONGO_URI) throw new Error("URI is missing");
+  await mongoose.connect(MONGO_URI);
 
   const todoDatabase: Database = {
     find: async (query) => await Todo.find(query),
