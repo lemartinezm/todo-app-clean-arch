@@ -14,8 +14,8 @@ export class UserControllerImpl implements UserController {
     return result;
   }
 
-  async getUser(id: string): Promise<User> {
-    const result = await this.userDataSource.getById(id);
+  async getUser(query: Partial<User>): Promise<User> {
+    const result = await this.userDataSource.getOne(query);
     return result;
   }
 

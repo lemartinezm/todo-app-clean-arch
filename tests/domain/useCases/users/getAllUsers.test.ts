@@ -7,7 +7,7 @@ describe("Get all users use case", () => {
     getAllUsers(): Promise<User[]> {
       throw new Error("Method not implemented.");
     }
-    getUser(id: string): Promise<User> {
+    getUser(query: Partial<User>): Promise<User> {
       throw new Error("Method not implemented.");
     }
     createUser(user: User): Promise<boolean> {

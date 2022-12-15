@@ -7,7 +7,7 @@ describe("User controller", () => {
     getAll(): Promise<User[]> {
       throw new Error("Method not implemented.");
     }
-    getById(id: string): Promise<User> {
+    getOne(query: Partial<User>): Promise<User> {
       throw new Error("Method not implemented.");
     }
     create(user: User): Promise<boolean> {
@@ -65,13 +65,13 @@ describe("User controller", () => {
     };
 
     jest
-      .spyOn(mockUserDataSource, "getById")
+      .spyOn(mockUserDataSource, "getOne")
       .mockImplementation(() => Promise.resolve(ExpectedResult));
 
     const userController = new UserControllerImpl(mockUserDataSource);
-    const result = await userController.getUser(id);
+    const result = await userController.getUser({ id });
 
-    expect(mockUserDataSource.getById).toHaveBeenCalledWith(id);
+    expect(mockUserDataSource.getOne).toHaveBeenCalledWith({ id });
     expect(result).toStrictEqual(ExpectedResult);
   });
 

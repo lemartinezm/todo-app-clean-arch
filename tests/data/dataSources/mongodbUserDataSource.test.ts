@@ -41,7 +41,7 @@ describe("MongoDB user data source", () => {
     expect(result).toStrictEqual(ExpectedResult);
   });
 
-  test("getById should return data", async () => {
+  test("getOne by id should return data", async () => {
     const id = "1a1a1a";
     const ExpectedResult: User = {
       id: "1a1a",
@@ -56,9 +56,30 @@ describe("MongoDB user data source", () => {
       .mockImplementation(() => Promise.resolve(ExpectedResult));
 
     const mongodbUserDataSource = new MongoDBUserDataSource(mockDatabase);
-    const result = await mongodbUserDataSource.getById(id);
+    const result = await mongodbUserDataSource.getOne({ id });
 
     expect(mockDatabase.findOne).toHaveBeenCalledWith({ _id: id });
+    expect(result).toStrictEqual(ExpectedResult);
+  });
+
+  test("getOne by username should return data", async () => {
+    const username = "luis123";
+    const ExpectedResult: User = {
+      id: "1a1a",
+      username: "luis123",
+      email: "luis@email.com",
+      password: "luisPass",
+      todos: ["todo1", "todo2"],
+    };
+
+    jest
+      .spyOn(mockDatabase, "findOne")
+      .mockImplementation(() => Promise.resolve(ExpectedResult));
+
+    const mongodbUserDataSource = new MongoDBUserDataSource(mockDatabase);
+    const result = await mongodbUserDataSource.getOne({ username });
+
+    expect(mockDatabase.findOne).toHaveBeenCalledWith({ username });
     expect(result).toStrictEqual(ExpectedResult);
   });
 
