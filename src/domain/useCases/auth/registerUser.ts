@@ -1,8 +1,8 @@
 import { User } from "../../entities/user";
 import { AuthController } from "../../interfaces/controllers/authController";
-import { RegisterUseUseCase } from "../../interfaces/useCases/auth/registerUser";
+import { RegisterUserUseCase } from "../../interfaces/useCases/auth/registerUser";
 
-export class RegisterUser implements RegisterUseUseCase {
+export class RegisterUser implements RegisterUserUseCase {
   authController: AuthController;
 
   constructor(authController: AuthController) {

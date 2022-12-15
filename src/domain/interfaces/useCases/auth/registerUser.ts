@@ -1,5 +1,5 @@
 import { User } from "../../../entities/user";
 
-export interface RegisterUseUseCase {
+export interface RegisterUserUseCase {
   execute(user: User): Promise<boolean>;
 }
