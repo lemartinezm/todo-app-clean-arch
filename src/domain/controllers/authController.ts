@@ -21,7 +21,10 @@ export class AuthControllerImpl implements AuthController {
   async loginUser(
     loginData: Pick<User, "email" | "password">
   ): Promise<string> {
-    const userFound = await this.userDataSource.getOne(loginData);
+    const userFound = await this.userDataSource.getOne({
+      email: loginData.email,
+      password: loginData.password,
+    });
     if (!userFound) throw new Error("Email or password is wrong");
 
     const SECRET_KEY = process.env.SECRET_KEY;
