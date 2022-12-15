@@ -4,6 +4,7 @@ import server from "./server";
 import { TodoRouter } from "./presentation/routers/todoRouter";
 import { UserRouter } from "./presentation/routers/userRouter";
 import { TeamRouter } from "./presentation/routers/teamRouter";
+import { AuthRouter } from "./presentation/routers/authRouter";
 
 import { TodoControllerImpl } from "./domain/controllers/todoController";
 import { UserControllerImpl } from "./domain/controllers/userController";
@@ -33,7 +34,11 @@ import { CreateTeam } from "./domain/useCases/teams/createTeam";
 import { DeleteTeam } from "./domain/useCases/teams/deleteTeam";
 import { UpdateTeam } from "./domain/useCases/teams/updateTeam";
 
+import { LoginUser } from "./domain/useCases/auth/loginUser";
+import { RegisterUser } from "./domain/useCases/auth/registerUser";
+
 import dotenv from "dotenv";
+import { AuthControllerImpl } from "./domain/controllers/authController";
 dotenv.config();
 
 (async () => {
@@ -69,7 +74,7 @@ dotenv.config();
       await Team.updateOne(query, dataToUpdate),
   };
 
-  const todoMiddleware = TodoRouter(
+  const todoRouter = TodoRouter(
     new GetAllTodos(
       new TodoControllerImpl(new MongoDBTodoDataSource(todoDatabase))
     ),
@@ -84,7 +89,7 @@ dotenv.config();
     )
   );
 
-  const userMiddleware = UserRouter(
+  const userRouter = UserRouter(
     new GetAllUsers(
       new UserControllerImpl(new MongoDBUserDataSource(userDatabase))
     ),
@@ -99,7 +104,7 @@ dotenv.config();
     )
   );
 
-  const teamMiddleware = TeamRouter(
+  const teamRouter = TeamRouter(
     new GetAllTeams(
       new TeamControllerImpl(new MongoDBTeamDataSource(teamDatabase))
     ),
@@ -117,9 +122,19 @@ dotenv.config();
     )
   );
 
-  server.use("/todo", todoMiddleware);
-  server.use("/user", userMiddleware);
-  server.use("/team", teamMiddleware);
+  const authRouter = AuthRouter(
+    new LoginUser(
+      new AuthControllerImpl(new MongoDBUserDataSource(userDatabase))
+    ),
+    new RegisterUser(
+      new AuthControllerImpl(new MongoDBUserDataSource(userDatabase))
+    )
+  );
+
+  server.use("/todo", todoRouter);
+  server.use("/user", userRouter);
+  server.use("/team", teamRouter);
+  server.use("/auth", authRouter);
   server.listen(4000, () => {
     console.log("Running server on port 4000");
   });
